@@ -13,20 +13,20 @@ contract Vaulttest{
     struct Vault {
         address owner;
         uint amount;
-        
+         address payable[] userarray;
         
 }
 
-        struct User {
-            address payable userAddress;
-            string name;
-            uint balance;
+//         struct User {
+//             address payable userAddress;
+//             string name;
+//             uint balance;
             
-}
+// }
 
-    address[] public userarray;
+   
 
-    mapping (uint => mapping (uint => User)) public users;
+    // mapping (uint => mapping (uint => User)) public users;
     
 
     mapping (uint => Vault) public vaults;
@@ -37,35 +37,36 @@ contract Vaulttest{
         _;
     }
     
-    function createVault()  public onlyOwnerof()  {
+    function createVault(address payable[] memory _users)  public onlyOwnerof()  {
         
         Vault storage vault = vaults[totalVaults];
         
         vault.owner =  msg.sender;
         vault.amount;
+        vault.userarray = _users;
         
         totalVaults++ ; 
         
     }
     
-    function AddUsers( address payable _users, string memory _name, uint vaultId)  public  onlyOwnerof() {
+    // function AddUsers( address payable _users, string memory _name, uint vaultId)  public  onlyOwnerof() {
         
        
        
-        User storage user = users[totalUsers][vaultId];
+    //     User storage user = users[][vaultId];
        
-       require(user.userAddress != _users, Same user);
+    //   require(user.userAddress != _users, "Same user");
        
-        user.userAddress = _users;
-        user.balance = 0;
-        user.name = _name;
+    //     user.userAddress = _users;
+    //     user.balance = 0;
+    //     user.name = _name;
         
-        userarray.push(_users);
+    //     userarray[][vaultId].push(_users);
         
-        totalUsers++ ; 
+    //     totalUsers++ ; 
         
-       // return vault;
-    }
+    //   // return vault;
+    // }
     
     
     function addMoney(uint vaultId) public payable  {
@@ -87,23 +88,24 @@ contract Vaulttest{
          Vault storage vault = vaults[vaultId];
         
          
-         uint amountperuser = vault.amount / userarray.length ;
+         uint amountperuser = vault.amount / vault.userarray.length ;
          
          require(vault.amount != 0, "0 balance. Add some money");
                uint userId = 0;
-         for(uint8 i; i< userarray.length; i++){
+         for(uint8 i; i< vault.userarray.length; i++){
              
              // balanceOf[vault.users[i]] = balanceOf[vault.users[i]] + amountperuser ;
-             User storage user = users[userId][vaultId];
+            // User storage user = users[userId][vaultId];
              
-             users[i][vaultId].userAddress.transfer(amountperuser);
+             vault.userarray[i].transfer(amountperuser);
               vault.amount = vault.amount - amountperuser;
-              user.balance += amountperuser; 
-              userId++;
+            //   user.balance += amountperuser; 
+            //   userId++;
                 
              }
          
          }
    
          }
+    
     
